@@ -62,22 +62,20 @@ function createRoverLinks() {
 </nav>`;
 }
 
-function createRoverContent() {
-  console.log("createRoverContent is called");
-  console.log("store.roverData is::", store.roverData);
+function createRoverContent(eachRover) {
+  // console.log("createRoverContent is called");
+  // console.log("store.roverData is::", store.roverData);
   if (store.roverData) {
     return `
-    <div class="rover-container">
-  <h1>${store.rover}</h1>
-  <img src="${store.roverData.data.photos[0].img_src}" class="rover-image" />
-  <h3 class="rover-title">Information</h3>
-  <ul class="rover-info-container">
-    <li>Landing Date: ${store.roverData.data.photos[0].rover.landing_date}</li>
-    <li>Launch Date: ${store.roverData.data.photos[0].rover.launch_date}</li>
-    <li>Status: ${store.roverData.data.photos[0].rover.status}</li>
-  </ul>
-  </div>
-  `;
+    <div class="rover-item">
+      <img src="${eachRover.img_src}" class="rover-image" />
+      <h3 class="rover-title">Information</h3>
+      <ul class="rover-info-container">
+        <li>Landing Date: ${eachRover.rover.landing_date}</li>
+        <li>Launch Date: ${eachRover.rover.launch_date}</li>
+        <li>Status: ${eachRover.rover.status}</li>
+      </ul>
+    </div>`;
   }
 }
 
@@ -99,8 +97,15 @@ const App = (state) => {
     return `
     ${createHeader()}
     ${createRoverLinks()}
-    ${store.roverData ? createRoverContent() : ""}
-    `;
+    <h1>${store.rover}</h1>
+    <div class="rover-container">
+    ${
+      store.roverData &&
+      store.roverData.data.photos
+        .slice(0, 10)
+        .map((eachRover) => createRoverContent(eachRover))
+    }
+    </div>`;
   }
 };
 

@@ -4,6 +4,12 @@
 
 This is a Mars rover dashboard that consumes the NASA API. it allows the user to select which rover's information they want to view. Once they have selected a rover, they will be able to see the most recent images taken by that rover, as well as important information about the rover and its mission. The app makes use of JavaScript functional concepts and practices and the goal is to become very comfortable using pure functions and iterating over, reshaping, and accessing information from complex API responses.
 
+### Features
+
+1. You can switch views between NASA Pic of the day and Rovers
+2. Within Rovers, You can switch views between opportunity, curiosity, and spirit rovers.
+3. The images take awhile to run.
+
 ### Deployment
 
 1. Clone the project

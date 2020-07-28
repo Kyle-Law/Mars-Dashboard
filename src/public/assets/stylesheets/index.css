@@ -25,10 +25,11 @@ header {
 
 .rover-container {
   display: grid;
-  grid-template-rows: 30px max-content;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  grid-template-columns: 400px 400px;
+}
+
+.rover-item {
+  width: 400px;
 }
 
 .rover-title {
