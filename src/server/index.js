@@ -17,26 +17,12 @@ app.use("/", express.static(path.join(__dirname, "../public")));
 // example API call
 app.get("/apod", async (req, res) => {
   try {
-    console.log("hehe");
     let data = await fetch(
       `https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}`
     ).then((res) => res.json());
     res.send({ data });
   } catch (err) {
     console.log("error:", err);
-  }
-});
-
-app.get("/neows", async (req, res) => {
-  try {
-    let data = await fetch(
-      `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${process.env.API_KEY}`
-    ).then((res) => res.json());
-    res.send({ data });
-    // res.send("hello");
-  } catch (err) {
-    console.log("error:", err);
-    res.send("err");
   }
 });
 
@@ -85,6 +71,19 @@ app.get("/images", async (req, res) => {
   try {
     let data = await fetch(
       `https://images-api.nasa.gov/search?q=mars`
+    ).then((res) => res.json());
+    res.send({ data });
+    // res.send("hello");
+  } catch (err) {
+    console.log("error:", err);
+    res.send("err");
+  }
+});
+
+app.get("/neows", async (req, res) => {
+  try {
+    let data = await fetch(
+      `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${process.env.API_KEY}`
     ).then((res) => res.json());
     res.send({ data });
     // res.send("hello");
