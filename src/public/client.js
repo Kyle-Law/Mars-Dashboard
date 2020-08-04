@@ -1,17 +1,20 @@
-let store = {
-  user: { name: "Kyle" },
+let store = Immutable.Map({
+  user: Immutable.Map({ name: "Kyle" }),
   apod: "",
   roverData: "",
   link: "",
   rover: "",
   loading: true,
-};
+});
+// console.log(store);
+// console.log(store.get("user").get("name"));
+// console.log(store.get("rover"));
 
 // add our markup to the page
 const root = document.getElementById("root");
 
 const updateStore = (store, newState) => {
-  store = Object.assign(store, newState);
+  store = store.merge(newState);
   render(root, store);
 };
 
@@ -65,7 +68,7 @@ function createRoverLinks() {
 function createRoverContent(eachRover) {
   // console.log("createRoverContent is called");
   // console.log("store.roverData is::", store.roverData);
-  if (store.roverData) {
+  if (store.get("roverData")) {
     return `
     <div class="rover-item">
       <img src="${eachRover.img_src}" class="rover-image" />
@@ -81,12 +84,13 @@ function createRoverContent(eachRover) {
 
 // create content
 const App = (state) => {
-  let { rovers, apod } = state;
-  if (store.link === "APOD") {
+  const apod = state.get("apod");
+
+  if (store.get("link") === "APOD") {
     return `
         ${createHeader()}
         <main>
-          ${Greeting(store.user.name)}
+          ${Greeting(store.get("user").get("name"))}
           <section>
             ${ImageOfTheDay(apod)}
           </section>
@@ -97,12 +101,13 @@ const App = (state) => {
     return `
     ${createHeader()}
     ${createRoverLinks()}
-    <h1 class="rover-header">${store.rover}</h1>
+    <h1 class="rover-header">${store.get("rover")}</h1>
     <div class="rover-container">
     ${
-      store.roverData &&
-      store.roverData.data.photos
-        .slice(0, 10)
+      store.get("roverData") &&
+      store
+        .get("roverData")
+        .data.photos.slice(0, 10)
         .map((eachRover) => createRoverContent(eachRover))
         .join("")
     }
@@ -161,13 +166,13 @@ const ImageOfTheDay = (apod) => {
 
 // functions for handling click events
 function setLink(link) {
-  store.link = link;
+  store = store.set("link", link);
   render(root, store);
 }
 
 function setRover(rover) {
-  store.rover = rover;
-  getRover(store.rover);
+  store = store.set("rover", rover);
+  getRover(store.get("rover"));
   console.log(`setRover is called`);
   render(root, store);
 }
