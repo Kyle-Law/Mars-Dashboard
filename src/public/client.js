@@ -69,8 +69,8 @@ function createRoverContent(eachRover) {
     return `
     <div class="rover-item">
       <img src="${eachRover.img_src}" class="rover-image" />
-      <h3 class="rover-title">Information</h3>
       <ul class="rover-info-container">
+        <li>Photo ID: ${eachRover.id}</li>
         <li>Landing Date: ${eachRover.rover.landing_date}</li>
         <li>Launch Date: ${eachRover.rover.launch_date}</li>
         <li>Status: ${eachRover.rover.status}</li>
@@ -97,13 +97,14 @@ const App = (state) => {
     return `
     ${createHeader()}
     ${createRoverLinks()}
-    <h1>${store.rover}</h1>
+    <h1 class="rover-header">${store.rover}</h1>
     <div class="rover-container">
     ${
       store.roverData &&
       store.roverData.data.photos
         .slice(0, 10)
         .map((eachRover) => createRoverContent(eachRover))
+        .join("")
     }
     </div>`;
   }
