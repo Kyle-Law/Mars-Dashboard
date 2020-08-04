@@ -121,12 +121,12 @@ window.addEventListener("load", () => {
 const Greeting = (name) => {
   if (name) {
     return `
-            <h1>Welcome, ${name}!</h1>
+            <h1 class="greeting">Welcome, ${name}!</h1>
         `;
   }
 
   return `
-        <h1>Hello!</h1>
+        <h1 class="greeting">Hello!</h1>
     `;
 };
 
@@ -146,14 +146,14 @@ const ImageOfTheDay = (apod) => {
   if (apod.data.media_type === "video") {
     console.log("media type is video");
     return `
-            <p>See today's featured video</p> <iframe width="560" height="315" src=${apod.data.url} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p>See today's featured video</p> <iframe class="apod" src=${apod.data.url} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <p>${apod.data.title}</p>
             <p>${apod.data.explanation}</p>
         `;
   } else {
     console.log("media type is photo");
     return `
-            <img src="${apod.data.url}" height="350px" width="100%" />
+            <img class="apod" src="${apod.data.url}" />
             <p>${apod.data.explanation}</p>
         `;
   }
