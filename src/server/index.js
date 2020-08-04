@@ -66,6 +66,7 @@ app.get("/rover/spirit", async (req, res) => {
     res.send("err");
   }
 });
+/*
 // https://images-api.nasa.gov
 app.get("/images", async (req, res) => {
   try {
@@ -92,5 +93,6 @@ app.get("/neows", async (req, res) => {
     res.send("err");
   }
 });
+*/
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
