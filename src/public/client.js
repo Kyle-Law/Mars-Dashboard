@@ -36,7 +36,7 @@ function createRoverLinks() {
 function roverBtn(roverName) {
   return `
   <li>
-    <button class="list-button" onclick="setRover("${String(roverName)}")">
+    <button class="list-button" onclick="setRover('${String(roverName)}')">
       ${roverName.toUpperCase()}
     </button>
   </li>`;
