@@ -1,10 +1,11 @@
-let store = Immutable.Map({
+const store = Immutable.Map({
   user: Immutable.Map({ name: "Kyle" }),
   apod: "",
   roverData: "",
   link: "",
   rover: "",
   loading: true,
+  roverChoices: ["curiosity", "spirit", "opportunity"],
 });
 
 // add our markup to the page
@@ -21,45 +22,24 @@ const render = async (root, state) => {
 
 // Component Helpers
 
-const createHeader = () => {
-  return `
-      <header>
-      <ul class="li-container">
-        <li>
-          <button class="list-button" onclick="setLink('APOD')">
-            Astronomy Picture of The Day
-          </button>
-        </li>
-        <li>
-          <button class="list-button" onclick="setLink('rover')">
-            Mars Rover Photos
-          </button>
-        </li>
-      </ul>
-    </header>
-  `;
-};
-
 function createRoverLinks() {
   return `<nav>
   <ul class="li-container">
-    <li>
-      <button class="list-button" onclick="setRover('curiosity')">
-        Curiosity
-      </button>
-    </li>
-    <li>
-      <button class="list-button" onclick="setRover('opportunity')">
-        Opportunity
-      </button>
-    </li>
-    <li>
-      <button class="list-button" onclick="setRover('spirit')">
-        Spirit
-      </button>
-    </li>
+    ${store
+      .get("roverChoices")
+      .map((rover) => roverBtn(rover))
+      .join("")}
   </ul>
 </nav>`;
+}
+
+function roverBtn(roverName) {
+  return `
+  <li>
+    <button class="list-button" onclick="setRover("${String(roverName)}")">
+      ${roverName.toUpperCase()}
+    </button>
+  </li>`;
 }
 
 function createRoverContent(eachRover) {
@@ -83,7 +63,6 @@ const App = (state) => {
   console.log("passing to App...");
   if (state.get("link") === "APOD") {
     return `
-        ${createHeader()}
         <main>
           ${Greeting(state.get("user").get("name"))}
           <section>
@@ -94,7 +73,6 @@ const App = (state) => {
     `;
   } else {
     return `
-    ${createHeader()}
     ${createRoverLinks()}
     <h1 class="rover-header">${state.get("rover")}</h1>
     <div class="rover-container">
@@ -177,6 +155,7 @@ function setLink(link) {
 }
 
 function setRover(rover) {
+  console.log(rover);
   store = store.set("rover", rover);
   getRover(store.get("rover"));
   console.log(`setRover is called`);
