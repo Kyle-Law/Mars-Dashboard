@@ -149,19 +149,23 @@ const ImageOfTheDay = (apod) => {
   if (apod.get("data").get("media_type") === "video") {
     console.log("media type is video");
     return `
-            <p>See today's featured video</p> <iframe class="apod" src=${apod
+            <p>See today's featured video</p> <iframe class="apod" width="95%" height="100%" src=${apod
               .get("data")
               .get(
                 "url"
               )} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <p>${apod.get("data").get("title")}</p>
-            <p>${apod.get("data").get("explanation")}</p>
+            <div class="apod-text-container">
+              <p>${apod.get("data").get("title")}</p>
+              <p>${apod.get("data").get("explanation")}</p>
+            </div>
         `;
   } else {
     console.log("media type is photo");
     return `
             <img class="apod" src="${apod.get("data").get("url")}" />
-            <p>${apod.get("data").get("explanation")}</p>
+            <div class="apod-text-container">
+              <p>${apod.get("data").get("explanation")}</p>
+            </div>
         `;
   }
 };
