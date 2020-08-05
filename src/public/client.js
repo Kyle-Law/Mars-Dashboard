@@ -11,15 +11,43 @@ let store = Immutable.Map({
 const root = document.getElementById("root");
 
 const updateStore = (store, newState) => {
-  console.log(newState, store.get("roverData"));
+  console.log("a");
   store = store.merge(newState);
-  console.log(store.get("roverData").get("data").get("photos"));
+  console.log("merge done");
+  console.log("check roverData", store.get("roverData"));
+  console.log("check roverData.data", store.get("roverData").get("data"));
+  console.log(
+    "check roverData.data.photos",
+    store.get("roverData").get("data").get("photos")
+  );
+
   render(root, store);
 };
 
 const render = async (root, state) => {
+  console.log("rendering");
   root.innerHTML = App(state);
+  console.log(state.get("roverData"));
 };
+
+// class RoverDataModel {
+//   constructor(rovDetails) {
+//       this.roverName = rovDetails.image.photos[0].rover.name;
+//       this.roverStatus = rovDetails.image.photos[0].rover.status;
+//       this.recentDate = rovDetails.image.photos[0].rover.max_date;
+//       this.launchDate = rovDetails.image.photos[0].rover.launch_date;
+//       this.landingDate = rovDetails.image.photos[0].rover.landing_date;
+//       this.imageSources = this.getImgSources(rovDetails);
+//   }
+//   getImgSources(roverDataResponse) {
+//       let rovDetails = JSON.parse(JSON.stringify(roverDataResponse));
+//       let thirtyRoverImages = rovDetails.image.photos.splice(1, 30);
+//       return thirtyRoverImages.map(this.getRovImgSrc);
+//   }
+//   getRovImgSrc(roverImage) {
+//       return roverImage.img_src;
+//   }
+// }
 
 // Component Helpers
 
@@ -67,47 +95,54 @@ function createRoverLinks() {
 function createRoverContent(eachRover) {
   // console.log("createRoverContent is called");
   // console.log("store.roverData is::", store.roverData);
-  if (store.get("roverData")) {
-    return `
+  console.log(store.get("roverData"));
+  // if (store.get("roverData")) {
+  return `
     <div class="rover-item">
-      <img src="${eachRover.img_src}" class="rover-image" />
+      <img src="${eachRover.get("img_src")}" class="rover-image" />
       <ul class="rover-info-container">
-        <li>Photo ID: ${eachRover.id}</li>
-        <li>Landing Date: ${eachRover.rover.landing_date}</li>
-        <li>Launch Date: ${eachRover.rover.launch_date}</li>
-        <li>Status: ${eachRover.rover.status}</li>
+        <li>Photo ID: ${eachRover.get("id")}</li>
+        <li>Landing Date: ${eachRover.get("rover").get("landing_date")}</li>
+        <li>Launch Date: ${eachRover.get("rover").get("launch_date")}</li>
+        <li>Status: ${eachRover.get("rover").get("status")}</li>
       </ul>
     </div>`;
-  }
+  // }
 }
 
 // create content
 const App = (state) => {
-  const apod = state.get("apod");
+  // const apod = state.get("apod");
+  console.log("passing to App");
+  console.log(state.get("roverData"));
 
   if (store.get("link") === "APOD") {
+    console.log(state.get("apod"));
     return `
         ${createHeader()}
         <main>
           ${Greeting(store.get("user").get("name"))}
           <section>
-            ${ImageOfTheDay(apod)}
+            ${ImageOfTheDay(state.get("apod"))}
           </section>
         </main>
         <footer></footer>
     `;
   } else {
-    console.log(store.get("roverData"));
+    console.log(state.get("roverData"));
     return `
     ${createHeader()}
     ${createRoverLinks()}
-    <h1 class="rover-header">${store.get("rover")}</h1>
+    <h1 class="rover-header">${state.get("rover")}</h1>
     <div class="rover-container">
     ${
-      store.get("roverData") &&
-      store
+      state.get("roverData") &&
+      state
         .get("roverData")
-        .data.photos.slice(0, 10)
+        .get("data")
+        .get("photos")
+        .toArray()
+        .slice(0, 10)
         .map((eachRover) => createRoverContent(eachRover))
         .join("")
     }
@@ -137,29 +172,34 @@ const Greeting = (name) => {
 
 // Example of a pure function that renders infomation requested from the backend
 const ImageOfTheDay = (apod) => {
+  console.log(apod);
   // If image does not already exist, or it is not from today -- request it again
   const today = new Date();
   const photodate = new Date(apod.date);
   // console.log(photodate.getDate(), today.getDate());
 
   // console.log(photodate.getDate() === today.getDate());
-  if (!apod || apod.date === today.getDate()) {
+  if (!apod || apod.get("date") === today.getDate()) {
     getImageOfTheDay(store);
   }
 
   // check if the photo of the day is actually type video!
-  if (apod.data.media_type === "video") {
+  if (apod.get("data").get("media_type") === "video") {
     console.log("media type is video");
     return `
-            <p>See today's featured video</p> <iframe class="apod" src=${apod.data.url} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <p>${apod.data.title}</p>
-            <p>${apod.data.explanation}</p>
+            <p>See today's featured video</p> <iframe class="apod" src=${apod
+              .get("data")
+              .get(
+                "url"
+              )} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p>${apod.get("data").get("title")}</p>
+            <p>${apod.get("data").get("explanation")}</p>
         `;
   } else {
     console.log("media type is photo");
     return `
-            <img class="apod" src="${apod.data.url}" />
-            <p>${apod.data.explanation}</p>
+            <img class="apod" src="${apod.get("data").get("url")}" />
+            <p>${apod.get("data").get("explanation")}</p>
         `;
   }
 };
