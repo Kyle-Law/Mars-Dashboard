@@ -6,15 +6,14 @@ let store = Immutable.Map({
   rover: "",
   loading: true,
 });
-// console.log(store);
-// console.log(store.get("user").get("name"));
-// console.log(store.get("rover"));
 
 // add our markup to the page
 const root = document.getElementById("root");
 
 const updateStore = (store, newState) => {
+  console.log(newState, store.get("roverData"));
   store = store.merge(newState);
+  console.log(store.get("roverData").get("data").get("photos"));
   render(root, store);
 };
 
@@ -98,6 +97,7 @@ const App = (state) => {
         <footer></footer>
     `;
   } else {
+    console.log(store.get("roverData"));
     return `
     ${createHeader()}
     ${createRoverLinks()}
@@ -189,7 +189,10 @@ const getImageOfTheDay = (state) => {
 const getRover = (roverSelected) => {
   fetch(`http://localhost:3000/rover/${roverSelected}`)
     .then((res) => res.json())
-    .then((roverData) => updateStore(store, { roverData }));
+    .then((roverData) => {
+      console.log(roverData);
+      updateStore(store, { roverData });
+    });
   // .then((data) => console.log(data));
   // console.log(store.roverData);
 };
