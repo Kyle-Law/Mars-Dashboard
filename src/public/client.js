@@ -11,23 +11,12 @@ let store = Immutable.Map({
 const root = document.getElementById("root");
 
 const updateStore = (store, newState) => {
-  console.log("a");
   store = store.merge(newState);
-  console.log("merge done");
-  console.log("check roverData", store.get("roverData"));
-  console.log("check roverData.data", store.get("roverData").get("data"));
-  console.log(
-    "check roverData.data.photos",
-    store.get("roverData").get("data").get("photos")
-  );
-
   render(root, store);
 };
 
 const render = async (root, state) => {
-  console.log("rendering");
   root.innerHTML = App(state);
-  console.log(state.get("roverData"));
 };
 
 // class RoverDataModel {
@@ -93,9 +82,6 @@ function createRoverLinks() {
 }
 
 function createRoverContent(eachRover) {
-  // console.log("createRoverContent is called");
-  // console.log("store.roverData is::", store.roverData);
-  console.log(store.get("roverData"));
   // if (store.get("roverData")) {
   return `
     <div class="rover-item">
@@ -113,15 +99,12 @@ function createRoverContent(eachRover) {
 // create content
 const App = (state) => {
   // const apod = state.get("apod");
-  console.log("passing to App");
-  console.log(state.get("roverData"));
 
-  if (store.get("link") === "APOD") {
-    console.log(state.get("apod"));
+  if (state.get("link") === "APOD") {
     return `
         ${createHeader()}
         <main>
-          ${Greeting(store.get("user").get("name"))}
+          ${Greeting(state.get("user").get("name"))}
           <section>
             ${ImageOfTheDay(state.get("apod"))}
           </section>
@@ -129,7 +112,6 @@ const App = (state) => {
         <footer></footer>
     `;
   } else {
-    console.log(state.get("roverData"));
     return `
     ${createHeader()}
     ${createRoverLinks()}
@@ -172,7 +154,6 @@ const Greeting = (name) => {
 
 // Example of a pure function that renders infomation requested from the backend
 const ImageOfTheDay = (apod) => {
-  console.log(apod);
   // If image does not already exist, or it is not from today -- request it again
   const today = new Date();
   const photodate = new Date(apod.date);
