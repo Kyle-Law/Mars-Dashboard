@@ -19,25 +19,6 @@ const render = async (root, state) => {
   root.innerHTML = App(state);
 };
 
-// class RoverDataModel {
-//   constructor(rovDetails) {
-//       this.roverName = rovDetails.image.photos[0].rover.name;
-//       this.roverStatus = rovDetails.image.photos[0].rover.status;
-//       this.recentDate = rovDetails.image.photos[0].rover.max_date;
-//       this.launchDate = rovDetails.image.photos[0].rover.launch_date;
-//       this.landingDate = rovDetails.image.photos[0].rover.landing_date;
-//       this.imageSources = this.getImgSources(rovDetails);
-//   }
-//   getImgSources(roverDataResponse) {
-//       let rovDetails = JSON.parse(JSON.stringify(roverDataResponse));
-//       let thirtyRoverImages = rovDetails.image.photos.splice(1, 30);
-//       return thirtyRoverImages.map(this.getRovImgSrc);
-//   }
-//   getRovImgSrc(roverImage) {
-//       return roverImage.img_src;
-//   }
-// }
-
 // Component Helpers
 
 const createHeader = () => {
@@ -99,7 +80,7 @@ function createRoverContent(eachRover) {
 // create content
 const App = (state) => {
   // const apod = state.get("apod");
-
+  console.log("passing to App...");
   if (state.get("link") === "APOD") {
     return `
         ${createHeader()}
@@ -188,7 +169,7 @@ const ImageOfTheDay = (apod) => {
 // functions for handling click events
 function setLink(link) {
   store = store.set("link", link);
-  render(root, store);
+  getImageOfTheDay(store);
 }
 
 function setRover(rover) {
